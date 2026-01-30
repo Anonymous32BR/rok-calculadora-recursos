@@ -1,0 +1,68 @@
+{
+  "unidades": [
+    {
+      "kingdom": null,
+      "troop_type": "infantry",
+      "troop_tier": "T5",
+      "specialization": "unknown",
+      "kills": 282660269,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "cavalry",
+      "troop_tier": "T5",
+      "specialization": "unknown",
+      "kills": 354992077,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "archer",
+      "troop_tier": "T5",
+      "specialization": "unknown",
+      "kills": 238499235,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "siege",
+      "troop_tier": "T5",
+      "specialization": "unknown",
+      "kills": 27561844,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "infantry",
+      "troop_tier": "T4",
+      "specialization": "unknown",
+      "kills": 159333771,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "cavalry",
+      "troop_tier": "T4",
+      "specialization": "unknown",
+      "kills": 135089915,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "archer",
+      "troop_tier": "T4",
+      "specialization": "unknown",
+      "kills": 87981760,
+      "confidence": 0.99
+    },
+    {
+      "kingdom": null,
+      "troop_type": "siege",
+      "troop_tier": "T4",
+      "specialization": "unknown",
+      "kills": 2384303,
+      "confidence": 0.99
+    }
+  ]
+}

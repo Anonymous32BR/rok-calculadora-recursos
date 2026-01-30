@@ -1,0 +1,54 @@
+{
+  "_debug_layout": [
+    "Row 1 Col 1: Icon Infantaria T5, value 282.660.269",
+    "Row 1 Col 2: Icon Cavalaria T5, value 354.992.077",
+    "Row 1 Col 3: Icon Arqueiria T5, value 238.499.235",
+    "Row 2 Col 1: Icon Cerco T5, value 27.561.844",
+    "Row 2 Col 2: Icon Infantaria T4, value 159.333.771",
+    "Row 2 Col 3: Icon Cavalaria T4, value 135.089.915",
+    "Row 3 Col 1: Icon Arqueiria T4, value 87.981.760",
+    "Row 3 Col 2: Icon Cerco T4, value 2.384.303"
+  ],
+  "unidades": [
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T5",
+      "kills": 282660269
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T5",
+      "kills": 354992077
+    },
+    {
+      "troop_type": "archery",
+      "troop_tier": "T5",
+      "kills": 238499235
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T5",
+      "kills": 27561844
+    },
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T4",
+      "kills": 159333771
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T4",
+      "kills": 135089915
+    },
+    {
+      "troop_type": "archery",
+      "troop_tier": "T4",
+      "kills": 87981760
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T4",
+      "kills": 2384303
+    }
+  ]
+}

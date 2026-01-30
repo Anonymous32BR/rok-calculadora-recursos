@@ -1,0 +1,54 @@
+{
+  "_debug_layout": [
+    "Row 1 Col 1: Icon Infantry V, value 282.660.269",
+    "Row 1 Col 2: Icon Cavalry V, value 354.992.077",
+    "Row 1 Col 3: Icon Archer V, value 238.499.235",
+    "Row 2 Col 1: Icon Siege V, value 2.384.303",
+    "Row 2 Col 2: Icon Infantry IV, value 159.333.771",
+    "Row 2 Col 3: Icon Cavalry IV, value 135.089.915",
+    "Row 3 Col 1: Icon Archer IV, value 87.981.760",
+    "Row 3 Col 2: Icon Siege IV, value 27.561.844"
+  ],
+  "unidades": [
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T5",
+      "kills": 282660269
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T5",
+      "kills": 354992077
+    },
+    {
+      "troop_type": "archer",
+      "troop_tier": "T5",
+      "kills": 238499235
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T5",
+      "kills": 2384303
+    },
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T4",
+      "kills": 159333771
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T4",
+      "kills": 135089915
+    },
+    {
+      "troop_type": "archer",
+      "troop_tier": "T4",
+      "kills": 87981760
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T4",
+      "kills": 27561844
+    }
+  ]
+}

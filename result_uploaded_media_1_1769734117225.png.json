@@ -1,0 +1,54 @@
+{
+  "_debug_layout": [
+    "Item 1: Inf T5 - 0",
+    "Item 2: Cav T5 - 0",
+    "Item 3: Arq T5 - 0",
+    "Item 4: Cerco T5 - 0",
+    "Item 5: Inf T4 - 0",
+    "Item 6: Cav T4 - 0",
+    "Item 7: Arq T4 - 0",
+    "Item 8: Cerco T4 - 0"
+  ],
+  "unidades": [
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T5",
+      "kills": 0
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T5",
+      "kills": 0
+    },
+    {
+      "troop_type": "archer",
+      "troop_tier": "T5",
+      "kills": 0
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T5",
+      "kills": 0
+    },
+    {
+      "troop_type": "infantry",
+      "troop_tier": "T4",
+      "kills": 0
+    },
+    {
+      "troop_type": "cavalry",
+      "troop_tier": "T4",
+      "kills": 0
+    },
+    {
+      "troop_type": "archer",
+      "troop_tier": "T4",
+      "kills": 0
+    },
+    {
+      "troop_type": "siege",
+      "troop_tier": "T4",
+      "kills": 0
+    }
+  ]
+}
