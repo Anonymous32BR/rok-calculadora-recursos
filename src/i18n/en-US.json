@@ -1,0 +1,91 @@
+{
+    "app": {
+        "title": "Resource Calculator - Rise of Kingdoms",
+        "main": "Resource Calculator",
+        "subtitle": "Audit & Transfer Calculator"
+    },
+    "language": {
+        "ptBR": "Portuguese (Brazil)",
+        "enUS": "English (US)"
+    },
+    "buttons": {
+        "confirmAndCalculate": "CONFIRM AND CALCULATE",
+        "back": "Back"
+    },
+    "reading": {
+        "title": "Reading Verification",
+        "subtitle": "Check if the values match the screenshots."
+    },
+    "requirements": {
+        "title": "Requirements",
+        "description": "To ensure accurate calculations, all accounts whose screenshots are uploaded together must have identical Warehouse and Trading Post levels. Differences in these levels affect the fees and discounts applied to resources and may result in incorrect calculations of the transferable net amount."
+    },
+    "upload": {
+        "title": "Upload Backpack Screenshots",
+        "subtitle": "Click or drag your images here",
+        "processing": "Reading image...",
+        "newScan": "New Scan",
+        "oldLoaded": "Previous Data Loaded",
+        "start": "Start Scan (OCR)",
+        "selected": "images selected",
+        "addMore": "Add more"
+    },
+    "comparison": {
+        "button": "Load Comparison (Optional)",
+        "title": "Comparison with Previous",
+        "diffTotal": "Total Difference"
+    },
+    "footer": {
+        "title": "Resource Calculator — Rise of Kingdoms",
+        "copyright": "© Anonymous K32. All rights reserved."
+    },
+    "labels": {
+        "warehouse": "Warehouse",
+        "tradingPost": "Trading Post",
+        "resultsTitle": "Simulation Results",
+        "verifyTitle": "Verify Scan",
+        "verifySubtitle": "Adjust manually if needed",
+        "confirm": "Confirm Data",
+        "correction": "Manual Correction",
+        "configuration": "Level Configuration",
+        "level": "Level",
+        "discounted": "W/ DISCOUNT",
+        "discountedTotal": "TOTAL W/ DISCOUNT",
+        "grossTotal": "Total Gross",
+        "netTotalGeneral": "GRAND NET TOTAL",
+        "postTax": "Trading Post Tax"
+    },
+    "resources": {
+        "food": "Food",
+        "wood": "Wood",
+        "stone": "Stone",
+        "gold": "Gold",
+        "gems": "Gems",
+        "crystal": "Crystals"
+    },
+    "fields": {
+        "total": "Total",
+        "opened": "Opened",
+        "backpack": "Backpack",
+        "bag": "Bag",
+        "gross": "Gross",
+        "tax": "Tax",
+        "net": "Net"
+    },
+    "reports": {
+        "downloadMobile": "MOBILE (9:16)",
+        "downloadDesktop": "DESKTOP (16:9)",
+        "downloadTitle": "Download Report",
+        "reportTitle": "Transfer Report",
+        "reportOfficial": "Official Record",
+        "reportAudit": "This document certifies the resource availability simulation.",
+        "reportTotalNet": "Total Net Transferable",
+        "reportTotalGross": "Total Gross",
+        "reportDate": "Date",
+        "reportTime": "Time"
+    },
+    "errors": {
+        "invalidImage": "Invalid or unreadable screenshot",
+        "missingData": "Insufficient data for calculation"
+    }
+}

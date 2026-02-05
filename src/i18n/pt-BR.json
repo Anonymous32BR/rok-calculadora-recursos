@@ -1,0 +1,91 @@
+{
+    "app": {
+        "title": "Calculadora de Recursos - Rise of Kingdoms",
+        "main": "Calculadora de Recursos",
+        "subtitle": "Calculadora de Auditoria e Transferência"
+    },
+    "language": {
+        "ptBR": "Português (Brasil)",
+        "enUS": "English (US)"
+    },
+    "buttons": {
+        "confirmAndCalculate": "CONFIRMAR E CALCULAR",
+        "back": "Voltar"
+    },
+    "reading": {
+        "title": "Conferência de Leitura",
+        "subtitle": "Verifique se os valores batem com os prints."
+    },
+    "requirements": {
+        "title": "Requisitos",
+        "description": "Para garantir a precisão dos cálculos, é indispensável que todas as contas dos prints enviados simultaneamente tenham níveis idênticos de Armazém e de Posto Comercial. Diferenças nesses níveis alteram as taxas e os descontos aplicados aos recursos, podendo gerar resultados incorretos no cálculo do valor líquido transferível."
+    },
+    "upload": {
+        "title": "Enviar Prints da Mochila",
+        "subtitle": "Toque ou arraste suas imagens aqui",
+        "processing": "Lendo imagem...",
+        "newScan": "Nova Contagem",
+        "oldLoaded": "Dados Anteriores Carregados",
+        "start": "Iniciar Leitura (OCR)",
+        "selected": "imagens selecionadas",
+        "addMore": "Adicionar mais"
+    },
+    "comparison": {
+        "button": "Carregar Comparativo (Opcional)",
+        "title": "Comparação com Anterior",
+        "diffTotal": "Diferença Total"
+    },
+    "footer": {
+        "title": "Calculadora de Recursos — Rise of Kingdoms",
+        "copyright": "© Anonymous K32. Todos os direitos reservados."
+    },
+    "labels": {
+        "warehouse": "Armazém",
+        "tradingPost": "Posto Comercial",
+        "resultsTitle": "Resultado da Simulação",
+        "verifyTitle": "Verificação de Leitura",
+        "verifySubtitle": "Ajuste manualmente se necessário",
+        "confirm": "Confirmar Dados",
+        "correction": "Correção Manual",
+        "configuration": "Configuração dos Níveis",
+        "level": "Nível",
+        "discounted": "C/ DESCONTO",
+        "discountedTotal": "TOTAL COM DESCONTO",
+        "grossTotal": "Bruto Total",
+        "netTotalGeneral": "TOTAL LÍQUIDO GERAL",
+        "postTax": "Taxa Posto"
+    },
+    "resources": {
+        "food": "Comida",
+        "wood": "Madeira",
+        "stone": "Pedra",
+        "gold": "Ouro",
+        "gems": "Gemas",
+        "crystal": "Cristais"
+    },
+    "fields": {
+        "total": "Total",
+        "opened": "Abertos",
+        "backpack": "Mochila",
+        "bag": "Mochila",
+        "gross": "Bruto",
+        "tax": "Taxas",
+        "net": "Líquido"
+    },
+    "reports": {
+        "downloadMobile": "MOBILE (9:16)",
+        "downloadDesktop": "DESKTOP (16:9)",
+        "downloadTitle": "Baixar Relatório",
+        "reportTitle": "Relatório de Transferência",
+        "reportOfficial": "Registro Oficial",
+        "reportAudit": "Este documento comprova a simulação de recursos disponíveis.",
+        "reportTotalNet": "Total Líquido Geral",
+        "reportTotalGross": "Total Bruto",
+        "reportDate": "Data",
+        "reportTime": "Hora"
+    },
+    "errors": {
+        "invalidImage": "Print inválido ou ilegível",
+        "missingData": "Dados insuficientes para cálculo"
+    }
+}

@@ -54,9 +54,15 @@ export const TRADING_POST_TAX = {
     25: 0.08,
 };
 
+
+import foodIcon from '../assets/resources/food.png';
+import woodIcon from '../assets/resources/wood.png';
+import stoneIcon from '../assets/resources/stone.png';
+import goldIcon from '../assets/resources/gold.png';
+
 export const RESOURCES = [
-    { id: 'food', label: 'Comida', color: 'var(--color-food)' },
-    { id: 'wood', label: 'Madeira', color: 'var(--color-wood)' },
-    { id: 'stone', label: 'Pedra', color: 'var(--color-stone)' },
-    { id: 'gold', label: 'Ouro', color: 'var(--color-gold)' },
+    { id: 'food', label: 'Comida', color: 'var(--color-food)', icon: foodIcon },
+    { id: 'wood', label: 'Madeira', color: 'var(--color-wood)', icon: woodIcon },
+    { id: 'stone', label: 'Pedra', color: 'var(--color-stone)', icon: stoneIcon },
+    { id: 'gold', label: 'Ouro', color: 'var(--color-gold)', icon: goldIcon },
 ];

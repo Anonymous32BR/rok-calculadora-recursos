@@ -1,68 +1,102 @@
 import React from 'react';
 import { calculateTransferable, formatNumber, formatCompact } from '../core/calculator';
 import { RESOURCES } from '../core/constants';
+import { t } from '../i18n';
 
-const ResultsCard = ({ resourceData, warehouseLevel, tradingPostLevel }) => {
+const ResultsCard = ({ resourceData, warehouseLevel, tradingPostLevel, lang }) => {
 
     // Calculate totals for summary
-    const totalGross = RESOURCES.reduce((acc, curr) => acc + resourceData[curr.id], 0);
+    const totalGross = RESOURCES.reduce((acc, curr) => {
+        const val = resourceData[curr.id];
+        const amount = typeof val === 'object' ? val.total : val;
+        return acc + amount;
+    }, 0);
     const totalNet = RESOURCES.reduce((acc, curr) => {
-        const { net } = calculateTransferable(resourceData[curr.id], curr.id, warehouseLevel, tradingPostLevel);
+        const val = resourceData[curr.id];
+        const amount = typeof val === 'object' ? val.total : val;
+        const { net } = calculateTransferable(amount, curr.id, warehouseLevel, tradingPostLevel);
         return acc + net;
     }, 0);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-            {/* Resource List Items */}
             {RESOURCES.map(res => {
-                const { gross, protected: prot, tax, net } = calculateTransferable(resourceData[res.id], res.id, warehouseLevel, tradingPostLevel);
+                const resValue = resourceData[res.id];
+                const total = typeof resValue === 'object' ? resValue.total : resValue;
+                const bag = typeof resValue === 'object' ? resValue.bag : 0;
+                const open = Math.max(0, total - bag);
+
+                // Calculate calculations for EACH scenario independently
+                const calcTotal = calculateTransferable(total, res.id, warehouseLevel, tradingPostLevel);
+                const calcOpen = calculateTransferable(open, res.id, warehouseLevel, tradingPostLevel);
+                const calcBag = calculateTransferable(bag, res.id, warehouseLevel, tradingPostLevel);
+
+                // Helper to render a scenario block
+                const renderScenario = (label, calcData, isTotal = false) => (
+                    <div style={{
+                        background: isTotal ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255,255,255,0.02)',
+                        padding: '12px',
+                        borderRadius: '6px',
+                        border: isTotal ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid var(--border-subtle)',
+                        marginTop: '12px'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: isTotal ? 'var(--accent-green)' : 'var(--text-muted)', textTransform: 'uppercase' }}>{label} ({t(lang, 'fields.gross')})</span>
+                            <span style={{ fontSize: '0.9rem', color: isTotal ? 'var(--accent-green)' : 'var(--text-main)' }}>{formatCompact(calcData.gross)}</span>
+                        </div>
+
+                        {/* Deductions (Small/Red) */}
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '8px', paddingLeft: '8px', borderLeft: '2px solid var(--border-subtle)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>{t(lang, 'labels.warehouse')}</span>
+                                <span style={{ color: 'var(--accent-red)', fontFamily: 'JetBrains Mono, monospace' }}>-{formatNumber(calcData.protected)}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>{t(lang, 'labels.postTax')}</span>
+                                <span style={{ color: 'var(--accent-red)', fontFamily: 'JetBrains Mono, monospace' }}>-{formatNumber(calcData.tax)}</span>
+                            </div>
+                        </div>
+
+                        {/* Net Result */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: isTotal ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid var(--border-subtle)', paddingTop: '6px' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: isTotal ? 'var(--accent-green)' : 'var(--text-muted)' }}>
+                                {isTotal ? t(lang, 'labels.discountedTotal') : `${label} ${t(lang, 'labels.discounted')}`}
+                            </span>
+                            <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: isTotal ? 'var(--accent-green)' : 'var(--text-main)', fontFamily: 'JetBrains Mono, monospace' }}>
+                                {formatNumber(calcData.net)}
+                            </span>
+                        </div>
+                    </div>
+                );
 
                 return (
                     <div key={res.id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
                         {/* Header */}
                         <div style={{
-                            background: 'rgba(0,0,0,0.3)',
-                            padding: '12px 16px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
+                            padding: '16px',
+                            background: 'rgba(0,0,0,0.2)',
+                            textAlign: 'center',
                             borderBottom: '1px solid var(--border-subtle)'
                         }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: res.color }}></div>
-                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: res.color }}>{res.label}</span>
-                            </div>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                Bruto: {formatCompact(gross)}
-                            </div>
-                        </div>
-
-                        {/* Body logic */}
-                        <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                            <div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Travado</div>
-                                <div style={{ fontSize: '0.95rem' }}>{formatCompact(prot)}</div>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Imposto</div>
-                                <div style={{ fontSize: '0.95rem', color: 'var(--accent-red)' }}>-{formatCompact(tax)}</div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
+                                <img src={res.icon} alt={res.label} style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: res.color, textTransform: 'uppercase', letterSpacing: '2px' }}>
+                                    {t(lang, `resources.${res.id}`) || res.label}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Net Footer */}
-                        <div style={{
-                            background: 'rgba(16, 185, 129, 0.05)',
-                            padding: '12px 16px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            borderTop: '1px solid rgba(16, 185, 129, 0.2)'
-                        }}>
-                            <span style={{ fontSize: '0.85rem', color: 'var(--accent-green)', fontWeight: 600, textTransform: 'uppercase' }}>Transferível</span>
-                            <span style={{ fontSize: '1.2rem', color: 'var(--accent-green)', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>
-                                {formatNumber(net)}
-                            </span>
+                        {/* Body Scenarios */}
+                        <div style={{ padding: '16px' }}>
+                            {/* 1. Open Scenario */}
+                            {renderScenario(t(lang, 'fields.opened'), calcOpen)}
+
+                            {/* 2. Bag Scenario */}
+                            {renderScenario(t(lang, 'fields.backpack'), calcBag)}
+
+                            {/* 3. Total Scenario (Highlighted) */}
+                            {renderScenario(t(lang, 'fields.total'), calcTotal, true)}
                         </div>
                     </div>
                 );
@@ -75,7 +109,7 @@ const ResultsCard = ({ resourceData, warehouseLevel, tradingPostLevel }) => {
                 textAlign: 'center',
                 padding: '32px 16px'
             }}>
-                <h3 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '8px' }}>TOTAL LÍQUIDO GERAL</h3>
+                <h3 style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '8px' }}>{t(lang, 'labels.netTotalGeneral')}</h3>
                 <div style={{
                     fontSize: '2.5rem',
                     fontWeight: 800,
@@ -87,10 +121,10 @@ const ResultsCard = ({ resourceData, warehouseLevel, tradingPostLevel }) => {
                     {formatNumber(totalNet)}
                 </div>
                 <div style={{ marginTop: '16px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                    De um total bruto de {formatCompact(totalGross)}
+                    {t(lang, 'labels.grossTotal')}: {formatCompact(totalGross)}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

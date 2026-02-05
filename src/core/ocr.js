@@ -1,8 +1,11 @@
 import Tesseract from 'tesseract.js';
 import { parseOCRNumber } from './calculator';
+import { VisionService } from '../services/VisionService';
+import { validateImageQuality, validateResourceLogic } from './validator';
 import jsQR from 'jsqr';
 
 // Portuguese keywords for ROK resources
+// Although Vision AI handles languages, we keep this for the Tesseract fallback
 const KEYWORDS = {
     food: ['Comida', 'Food', 'Milho'],
     wood: ['Madeira', 'Wood'],
@@ -10,42 +13,73 @@ const KEYWORDS = {
     gold: ['Ouro', 'Gold'],
 };
 
-export const processImages = async (files, onProgress) => {
-    let totals = { food: 0, wood: 0, stone: 0, gold: 0 };
-    let totalFiles = files.length;
+// --------------------------------------------------------------------------
+// HELPER FUNCTIONS (Defined before usage)
+// --------------------------------------------------------------------------
 
-    for (let i = 0; i < totalFiles; i++) {
-        const file = files[i];
-        onProgress && onProgress((i / totalFiles) * 100, `Lendo imagem ${i + 1}/${totalFiles}...`);
+const checkImageSize = (file) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+    });
+};
 
-        try {
-            const { data: { text } } = await Tesseract.recognize(file, 'por', {
-                logger: m => {
-                    // Detailed progress if needed
-                    if (m.status === 'recognizing text') {
-                        // scale progress within the file's share
-                        // onProgress((i / totalFiles) * 100 + (m.progress * (100/totalFiles)), ...);
-                    }
+const parseROKText = (text) => {
+    const lines = text.split('\n');
+    const values = {
+        food: { total: 0, bag: 0 },
+        wood: { total: 0, bag: 0 },
+        stone: { total: 0, bag: 0 },
+        gold: { total: 0, bag: 0 }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        for (const [resKey, keyWords] of Object.entries(KEYWORDS)) {
+            const hasKeyword = keyWords.some(k => line.toLowerCase().includes(k.toLowerCase()));
+            if (hasKeyword) {
+                const numberPattern = /[0-9]+[.,]?[0-9]*\s*[KMB]?/gi;
+                const extractNumbers = (str) => {
+                    const matches = str.match(numberPattern) || [];
+                    return matches.map(m => parseOCRNumber(m)).filter(n => n > 0);
+                };
+
+                let numbersFound = extractNumbers(line);
+
+                if (numbersFound.length === 0 && i + 1 < lines.length) {
+                    numbersFound = extractNumbers(lines[i + 1]);
                 }
-            });
 
-            console.log('OCR Result:', text);
-            const extracted = parseROKText(text);
+                let currentTotal = 0;
+                let currentBag = 0;
 
-            totals.food += extracted.food;
-            totals.wood += extracted.wood;
-            totals.stone += extracted.stone;
-            totals.gold += extracted.gold;
+                if (numbersFound.length >= 2) {
+                    currentTotal = numbersFound[numbersFound.length - 1];
+                    currentBag = numbersFound[numbersFound.length - 2];
+                } else if (numbersFound.length === 1) {
+                    currentTotal = numbersFound[0];
+                    currentBag = 0;
+                }
 
-        } catch (err) {
-            console.error('OCR Error on file', file.name, err);
-            // Continue to next file even if one fails
+                if (currentTotal > 0 || currentBag > 0) {
+                    values[resKey].total += currentTotal;
+                    values[resKey].bag += currentBag;
+                    break;
+                }
+            }
         }
     }
 
-    onProgress && onProgress(100, 'Concluído!');
-    return totals;
+    return values;
 };
+
+// --------------------------------------------------------------------------
+// EXPORTED FUNCTIONS
+// --------------------------------------------------------------------------
 
 export const readQRCodeFromImage = async (file) => {
     return new Promise((resolve, reject) => {
@@ -76,64 +110,76 @@ export const readQRCodeFromImage = async (file) => {
     });
 };
 
-const parseROKText = (text) => {
-    const lines = text.split('\n');
-    const values = { food: 0, wood: 0, stone: 0, gold: 0 };
+export const processImages = async (files, onProgress) => {
+    let totals = {
+        food: { total: 0, bag: 0 },
+        wood: { total: 0, bag: 0 },
+        stone: { total: 0, bag: 0 },
+        gold: { total: 0, bag: 0 }
+    };
+    let totalFiles = files.length;
 
-    // Iterate lines to find keywords
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
+    for (let i = 0; i < totalFiles; i++) {
+        const file = files[i];
+        onProgress && onProgress((i / totalFiles) * 100, `Analisando imagem ${i + 1}/${totalFiles} com Vision AI...`);
 
-        for (const [resKey, keyWords] of Object.entries(KEYWORDS)) {
-            // Check if line contains resource name
-            const hasKeyword = keyWords.some(k => line.toLowerCase().includes(k.toLowerCase()));
-            if (hasKeyword) {
-                // This line SHOULD contain the values.
-                // Format is usually: "Comida 8.9M 45.7M"
-                // Or sometimes extracting might put them on next line?
-                // Let's look for ALL patterns that look like numbers in this line and the next line.
+        let fileResult = null;
+        let visionSuccess = false;
 
-                // Regex to capture numbers with optional K/M/B suffixes
-                // Matches: "45.7M", "100K", "5.950", "200"
-                const numberPattern = /[0-9]+[.,]?[0-9]*\s*[KMB]?/gi;
+        // 1. VISION AI (PRIMARY STRATEGY)
+        try {
+            console.log(`[VISION START] ${file.name} - Tentando análise visual...`);
+            const visionData = await VisionService.analyzeResources(file);
 
-                // Helper to find matches in a string
-                const extractNumbers = (str) => {
-                    const matches = str.match(numberPattern) || [];
-                    // Filter out isolated small numbers that might be noise/level indicators?
-                    // Actually, keep everything that parseOCRNumber can handle.
-                    return matches.map(m => parseOCRNumber(m)).filter(n => n > 0);
-                };
-
-                let numbersFound = extractNumbers(line);
-
-                // If no numbers in the same line, try the next line (often OCR splits "Title" \n "Values")
-                if (numbersFound.length === 0 && i + 1 < lines.length) {
-                    numbersFound = extractNumbers(lines[i + 1]);
-                }
-
-                // DECISION LOGIC:
-                // We have "De Itens" (Left) and "Recursos Totais" (Right).
-                // We WANT "Recursos Totais" (Right).
-                // So if we found 2 numbers (e.g. 8900000 and 45700000), pick the LAST one.
-                // If we found 1 number... it's risky, but assume it's the Total if it's the only one found? 
-                // Or if it's significantly larger?
-                // User said "Priorizar o valor MAIS À DIREITA".
-
-                if (numbersFound.length > 0) {
-                    // Take the last one found, which corresponds to the right-most column.
-                    const correctValue = numbersFound[numbersFound.length - 1];
-
-                    // Add to total (supporting multiple prints means we default +=)
-                    values[resKey] += correctValue;
-
-                    // Break inner keyword loop to avoid double matching same line
-                    break;
-                }
+            // Validate Vision Data
+            const logicCheck = validateResourceLogic(visionData);
+            if (logicCheck.valid) {
+                fileResult = visionData;
+                visionSuccess = true;
+                console.log(`[VISION SUCCESS] ${file.name} processado com sucesso.`);
+            } else {
+                console.warn(`[VISION REJECTED] ${file.name} - ${logicCheck.reason}`);
+                throw new Error("Vision Validation Failed: " + logicCheck.reason);
             }
+
+        } catch (visionErr) {
+            console.warn(`[VISION FAIL] ${file.name} - ${visionErr.message}. Tentando Fallback OCR...`);
+            visionSuccess = false;
+        }
+
+        // 2. OCR FALLBACK (SECONDARY STRATEGY)
+        if (!visionSuccess) {
+            onProgress && onProgress((i / totalFiles) * 100, `Vision falhou. Tentando OCR Tesseract em ${i + 1}...`);
+            try {
+                const { data: { text } } = await Tesseract.recognize(file, 'por', {
+                    logger: m => { } // Silent
+                });
+
+                const extract = parseROKText(text);
+                const logicCheck = validateResourceLogic(extract);
+
+                if (logicCheck.valid) {
+                    fileResult = extract;
+                    console.log(`[OCR SUB-SUCCESS] ${file.name} salvo pelo OCR (Fallback).`);
+                } else {
+                    console.warn(`[OCR FAIL] ${file.name} - ${logicCheck.reason}. Imagem descartada.`);
+                }
+            } catch (ocrErr) {
+                console.error(`[OCR CRISIS] ${file.name} - OCR também falhou.`, ocrErr);
+            }
+        }
+
+        // 3. ACUMULAÇÃO
+        if (fileResult) {
+            ['food', 'wood', 'stone', 'gold'].forEach(k => {
+                if (fileResult[k]) {
+                    totals[k].total += (fileResult[k].total || 0);
+                    totals[k].bag += (fileResult[k].bag || 0);
+                }
+            });
         }
     }
 
-    return values;
+    onProgress && onProgress(100, 'Concluído!');
+    return totals;
 };

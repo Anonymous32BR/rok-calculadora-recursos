@@ -1,54 +1,42 @@
 import React from 'react';
+import { t } from '../i18n';
 
-const Header = () => {
+const Header = ({ lang, setLang }) => {
     return (
-        <div style={{ marginBottom: '16px', position: 'relative' }}>
-            {/* Container for alignment */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '8px 0',
-            }}>
-
-                {/* Left: Kingdom Logo */}
-                <div style={{ flex: '0 0 100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <img src="/assets/logo-k32.png" alt="K32 Kingdom" style={{ maxHeight: '100px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+        <header className="top-header">
+            {/* Main Content Container */}
+            <div className="header-container">
+                <div className="logo left">
+                    <img src="/assets/logos/K32-ROK.png" alt="K32 Rise of Kingdoms" />
                 </div>
 
-                {/* Center: Title */}
-                <div style={{ flex: 1, textAlign: 'center', padding: '0 12px' }}>
-                    <h1 style={{
-                        margin: '0',
-                        lineHeight: '1.2',
-                        color: 'var(--primary-gold)',
-                        fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
-                        textShadow: '0 4px 12px rgba(0,0,0,0.5)'
-                    }}>
-                        CALCULADORA DE RECURSOS
-                    </h1>
-                    <div style={{
-                        fontSize: '0.85rem',
-                        color: 'var(--text-muted)',
-                        marginTop: '4px',
-                        fontFamily: 'Inter, sans-serif',
-                        letterSpacing: '2px',
-                        fontWeight: 500,
-                        textTransform: 'uppercase'
-                    }}>
-                        Rise of Kingdoms
+                <div className="center-stack">
+                    <div className="lang-switch">
+                        <img
+                            src="/assets/flags/br.png"
+                            alt="Português"
+                            className={`flag ${(lang === 'pt' || lang === 'pt-BR') ? 'active' : ''}`}
+                            onClick={() => setLang('pt-BR')}
+                        />
+                        <img
+                            src="/assets/flags/us.png"
+                            alt="English"
+                            className={`flag ${(lang === 'en' || lang === 'en-US') ? 'active' : ''}`}
+                            onClick={() => setLang('en-US')}
+                        />
+                    </div>
+
+                    <div className="title-area">
+                        <h1 className="rok-font">{t(lang, 'app.main')}</h1>
+                        <p>{t(lang, 'app.subtitle')}</p>
                     </div>
                 </div>
 
-                {/* Right: System Logo */}
-                <div style={{ flex: '0 0 100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <img src="/assets/logo-anonymous.png" alt="Anonymous 32BR" style={{ maxHeight: '100px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+                <div className="logo right">
+                    <img src="/assets/logos/Anonymous32BR.png" alt="Anonymous 32BR" />
                 </div>
-
             </div>
-
-            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, var(--border-subtle), transparent)', marginTop: '8px' }}></div>
-        </div>
+        </header>
     );
 };
 
