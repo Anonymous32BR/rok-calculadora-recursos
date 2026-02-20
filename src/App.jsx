@@ -318,7 +318,7 @@ function App() {
               {t(lang, 'footer.copyright')}
             </p>
             <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-              v3.0
+              v3.1
             </p>
           </div>
         )}
