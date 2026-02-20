@@ -11,6 +11,7 @@ import { t, DEFAULT_LANGUAGE } from './i18n'; // Updated Import
 import { UploadCloud, RefreshCw, AlertTriangle } from 'lucide-react';
 
 import Header from './components/Header';
+import AnnouncementBanner from './components/AnnouncementBanner';
 
 function App() {
   const [view, setView] = useState('HOME');
@@ -111,6 +112,7 @@ function App() {
   return (
     <>
       <Header lang={lang} setLang={setLang} />
+      <AnnouncementBanner lang={lang} />
 
       <div className="app-container">
 
